@@ -36,8 +36,6 @@ type Node struct {
 	// pollCh will send ArtPollReply packets
 	pollReplyCh chan packet.ArtPollReplyPacket
 
-	log Logger
-
 	callbacks map[code.OpCode]NodeCallbackFn
 }
 
@@ -49,7 +47,7 @@ type netPayload struct {
 }
 
 // NewNode return a Node
-func NewNode(name string, style code.StyleCode, ip net.IP, log Logger) *Node {
+func NewNode(name string, style code.StyleCode, ip net.IP) *Node {
 	n := &Node{
 		Config: NodeConfig{
 			Name: name,
@@ -57,7 +55,6 @@ func NewNode(name string, style code.StyleCode, ip net.IP, log Logger) *Node {
 		},
 		conn:     nil,
 		shutdown: true,
-		log:      log.With(Fields{"type": "Node"}),
 	}
 
 	// initialize required node callbacks
@@ -88,7 +85,7 @@ func (n *Node) Stop() {
 	close(n.shutdownCh)
 	if n.conn != nil {
 		if err := n.conn.Close(); err != nil {
-			n.log.Printf("failed to close read socket: %v")
+			fmt.Printf("failed to close read socket: %v")
 		}
 	}
 }
@@ -101,7 +98,6 @@ func (n *Node) isShutdown() bool {
 
 // Start will start the controller
 func (n *Node) Start() error {
-	n.log.With(Fields{"ip": n.Config.IP.String(), "type": n.Config.Type.String()}).Debug("node started")
 
 	n.sendCh = make(chan netPayload, 10)
 	n.recvCh = make(chan netPayload, 10)
@@ -113,7 +109,7 @@ func (n *Node) Start() error {
 	c, err := net.ListenPacket("udp4", fmt.Sprintf(":%d", packet.ArtNetPort))
 	if err != nil {
 		n.shutdownErr = fmt.Errorf("error net.ListenPacket: %s", err)
-		n.log.With(Fields{"error": err}).Error("error net.ListenPacket")
+
 		return err
 	}
 	n.conn = c.(*net.UDPConn)
@@ -134,7 +130,7 @@ func (n *Node) pollReplyLoop() {
 	p := ArtPollReplyFromConfig(n.Config)
 	me, err := p.MarshalBinary()
 	if err != nil {
-		n.log.With(Fields{"err": err}).Error("error creating ArtPollReply packet for self")
+
 		return
 	}
 
@@ -147,7 +143,6 @@ func (n *Node) pollReplyLoop() {
 
 		case <-n.pollCh:
 			// reply with pollReply
-			n.log.With(nil).Debug("sending ArtPollReply")
 
 			n.sendCh <- netPayload{
 				address: broadcastAddr,
@@ -175,12 +170,11 @@ func (n *Node) sendLoop() {
 				return
 			}
 
-			num, err := n.conn.WriteToUDP(payload.data, &payload.address)
+			_, err := n.conn.WriteToUDP(payload.data, &payload.address)
 			if err != nil {
-				n.log.With(Fields{"error": err}).Debugf("error writing packet")
+
 				continue
 			}
-			n.log.With(Fields{"dst": payload.address.String(), "bytes": num}).Debugf("packet sent")
 
 		}
 	}
@@ -213,11 +207,9 @@ func (n *Node) recvLoop() {
 					return
 				}
 
-				n.log.With(Fields{"src": from.String(), "bytes": num}).Errorf("failed to read from socket: %v", err)
 				continue
 			}
 
-			n.log.With(Fields{"src": from.String(), "bytes": num}).Debugf("received packet")
 			payload := netPayload{
 				address: *from,
 				err:     err,
@@ -234,10 +226,7 @@ func (n *Node) recvLoop() {
 		case payload := <-n.recvCh:
 			p, err := packet.Unmarshal(payload.data)
 			if err != nil {
-				n.log.With(Fields{
-					"src":  payload.address.IP.String(),
-					"data": fmt.Sprintf("%v", payload.data),
-				}).Warnf("failed to parse packet: %v", err)
+
 				continue
 			}
 
@@ -258,7 +247,7 @@ func (n *Node) recvLoop() {
 func (n *Node) handlePacket(p packet.ArtNetPacket) {
 	callback, ok := n.callbacks[p.GetOpCode()]
 	if !ok {
-		n.log.With(Fields{"packet": p}).Debugf("ignoring unhandled packet")
+
 		return
 	}
 
@@ -268,7 +257,7 @@ func (n *Node) handlePacket(p packet.ArtNetPacket) {
 func (n *Node) handlePacketPoll(p packet.ArtNetPacket) {
 	poll, ok := p.(*packet.ArtPollPacket)
 	if !ok {
-		n.log.With(Fields{"packet": p}).Debugf("unknown packet type")
+
 		return
 	}
 
@@ -280,7 +269,7 @@ func (n *Node) handlePacketPollReply(p packet.ArtNetPacket) {
 	if n.Config.Type == code.StController {
 		pollReply, ok := p.(*packet.ArtPollReplyPacket)
 		if !ok {
-			n.log.With(Fields{"packet": p}).Debugf("unknown packet type")
+
 			return
 		}
 
@@ -294,7 +283,7 @@ func (n *Node) handlePacketPollReply(p packet.ArtNetPacket) {
 // function multiple times replaces every previous callback.
 func (n *Node) RegisterCallback(opcode code.OpCode, callback NodeCallbackFn) {
 	if !n.isShutdown() {
-		n.log.With(Fields{"opcode": opcode}).Debugf("ignoring callback registration: node has already been started")
+
 		return
 	}
 
@@ -306,7 +295,7 @@ func (n *Node) RegisterCallback(opcode code.OpCode, callback NodeCallbackFn) {
 // has been started.
 func (n *Node) DeregisterCallback(opcode code.OpCode) {
 	if !n.isShutdown() {
-		n.log.With(Fields{"opcode": opcode}).Debugf("ignoring callback registration: node has already been started")
+
 		return
 	}
 
