@@ -92,17 +92,15 @@ type Controller struct {
 	shutdownCh chan struct{}
 
 	maxFPS int
-	log    Logger
 
 	pollTicker *time.Ticker
 	gcTicker   *time.Ticker
 }
 
 // NewController return a Controller
-func NewController(name string, ip net.IP, log Logger, opts ...Option) *Controller {
+func NewController(name string, ip net.IP, opts ...Option) *Controller {
 	c := &Controller{
-		cNode:  NewNode(name, code.StController, ip, log),
-		log:    log,
+		cNode:  NewNode(name, code.StController, ip),
 		maxFPS: 1000,
 	}
 
@@ -118,8 +116,7 @@ func (c *Controller) Start() error {
 	c.OutputAddress = make(map[Address]*ControlledNode)
 	c.InputAddress = make(map[Address]*ControlledNode)
 	c.shutdownCh = make(chan struct{})
-	c.cNode.log = c.log.With(Fields{"type": "Node"})
-	c.log = c.log.With(Fields{"type": "Controller"})
+
 	if err := c.cNode.Start(); err != nil {
 		return fmt.Errorf("failed to start controller node: %v", err)
 	}
@@ -155,7 +152,7 @@ func (c *Controller) pollLoop() {
 	// create an ArtPoll packet to send out periodically
 	b, err := artPoll.MarshalBinary()
 	if err != nil {
-		c.log.With(Fields{"err": err}).Error("error creating ArtPoll packet")
+
 		return
 	}
 
@@ -197,7 +194,7 @@ func (c *Controller) pollLoop() {
 			}
 
 			if err := c.updateNode(cfg); err != nil {
-				c.log.With(Fields{"err": err}).Error("error updating node")
+
 			}
 
 		case <-c.shutdownCh:
@@ -209,7 +206,6 @@ func (c *Controller) pollLoop() {
 // SendDMXToAddress will set the DMXBuffer for a destination address
 // and update the node
 func (c *Controller) SendDMXToAddress(dmx [512]byte, address Address) {
-	c.log.With(Fields{"address": address.String()}).Debug("received update channels")
 
 	c.nodeLock.Lock()
 	defer c.nodeLock.Unlock()
@@ -218,12 +214,12 @@ func (c *Controller) SendDMXToAddress(dmx [512]byte, address Address) {
 	var ok bool
 
 	if cn, ok = c.OutputAddress[address]; !ok {
-		c.log.With(Fields{"address": address.String()}).Error("could not find node for address")
+
 		return
 	}
 	err := cn.setDMXBuffer(dmx, address)
 	if err != nil {
-		c.log.With(Fields{"err": err, "address": address.String()}).Error("error setting buffer on address")
+
 		return
 	}
 }
@@ -266,14 +262,14 @@ func (c *Controller) dmxUpdateLoop() {
 				if node.DMXBuffer[address].Stale && node.DMXBuffer[address].LastUpdate.Before(now.Add(-fpsInterval)) {
 					err := update(node, address, now)
 					if err != nil {
-						c.log.With(Fields{"err": err, "address": address.String()}).Error("error getting buffer for address")
+
 						continue
 					}
 				}
 				if node.DMXBuffer[address].LastUpdate.Before(now.Add(-forceUpdate)) {
 					err := update(node, address, now)
 					if err != nil {
-						c.log.With(Fields{"err": err, "address": address.String()}).Error("error getting buffer for address")
+
 						continue
 					}
 				}
@@ -296,7 +292,7 @@ func (c *Controller) updateNode(cfg NodeConfig) error {
 	for i := range c.Nodes {
 		if bytes.Equal(cfg.IP, c.Nodes[i].Node.IP) {
 			// update this node, since we already know about it
-			c.log.With(Fields{"node": cfg.Name, "ip": cfg.IP.String()}).Debug("updated node")
+
 			// remove references to this node from the output map
 			for _, port := range c.Nodes[i].Node.OutputPorts {
 				delete(c.OutputAddress, port.Address)
@@ -324,7 +320,7 @@ func (c *Controller) updateNode(cfg NodeConfig) error {
 	}
 
 	// new node, add it to our known nodes
-	c.log.With(Fields{"node": cfg.Name, "ip": cfg.IP.String()}).Debug("added node")
+
 	node := &ControlledNode{
 		Node:       cfg,
 		DMXBuffer:  buf,
@@ -381,7 +377,6 @@ start:
 	for i := range c.Nodes {
 		if c.Nodes[i].LastSeen.Add(staleAfter).Before(time.Now()) {
 			// it has been more then X seconds since we saw this node. remove it now.
-			c.log.With(Fields{"node": c.Nodes[i].Node.Name, "ip": c.Nodes[i].Node.IP.String()}).Debug("remove stale node")
 
 			// remove references to this node from the output map
 			for _, port := range c.Nodes[i].Node.OutputPorts {

@@ -27,8 +27,7 @@ func main() {
 		}
 	}
 
-	log := artnet.NewDefaultLogger()
-	c := artnet.NewController("controller-1", ip, log)
+	c := artnet.NewController("controller-1", ip)
 	c.Start()
 
 	go func() {
