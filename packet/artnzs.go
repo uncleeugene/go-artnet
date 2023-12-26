@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtNzsPacket{}
@@ -13,15 +13,16 @@ var _ ArtNetPacket = &ArtNzsPacket{}
 // Controller to Node
 //
 // Packet Strategy:
-//  Controller -  Receive:            Application Specific
-//                Unicast Transmit:   Yes
-//                Broadcast Transmit: No
-//  Node -        Receive:            Application Specific
-//                Unicast Transmit:   Yes
-//                Broadcast Transmit: No
-//  MediaServer - Receive:            Application Specific
-//                Unicast Transmit:   Yes
-//                Broadcast Transmit: No
+//
+//	Controller -  Receive:            Application Specific
+//	              Unicast Transmit:   Yes
+//	              Broadcast Transmit: No
+//	Node -        Receive:            Application Specific
+//	              Unicast Transmit:   Yes
+//	              Broadcast Transmit: No
+//	MediaServer - Receive:            Application Specific
+//	              Unicast Transmit:   Yes
+//	              Broadcast Transmit: No
 type ArtNzsPacket struct {
 	// Inherit the Header header
 	Header

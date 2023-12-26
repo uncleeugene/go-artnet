@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jsimonetti/go-artnet/packet/code"
-	"github.com/jsimonetti/go-artnet/version"
+	"github.com/uncleeugene/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/version"
 )
 
 func TestArtDMXPacketMarshal(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/jsimonetti/go-artnet/packet/code"
-	"github.com/jsimonetti/go-artnet/version"
+	"github.com/uncleeugene/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/version"
 )
 
 // Various errors which may occur when attempting to marshal or unmarshal

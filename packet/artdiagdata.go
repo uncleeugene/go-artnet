@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtDiagDataPacket{}
@@ -13,15 +13,16 @@ var _ ArtNetPacket = &ArtDiagDataPacket{}
 // destination to which these messages should be sent.
 //
 // Packet Strategy:
-//  Controller -  Receive:            Application Specific
-//                Unicast Transmit:   As defined by ArtPoll
-//                Broadcast Transmit: As defined by ArtPoll
-//  Node -        Receive:            No Action
-//                Unicast Transmit:   As defined by ArtPoll
-//                Broadcast Transmit: As defined by ArtPoll
-//  MediaServer - Receive:            No Action
-//                Unicast Transmit:   As defined by ArtPoll
-//                Broadcast Transmit: As defined by ArtPoll
+//
+//	Controller -  Receive:            Application Specific
+//	              Unicast Transmit:   As defined by ArtPoll
+//	              Broadcast Transmit: As defined by ArtPoll
+//	Node -        Receive:            No Action
+//	              Unicast Transmit:   As defined by ArtPoll
+//	              Broadcast Transmit: As defined by ArtPoll
+//	MediaServer - Receive:            No Action
+//	              Unicast Transmit:   As defined by ArtPoll
+//	              Broadcast Transmit: As defined by ArtPoll
 type ArtDiagDataPacket struct {
 	// Inherit the Header header
 	Header

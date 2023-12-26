@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtIPProgPacket{}
@@ -14,15 +14,16 @@ var _ ArtNetPacket = &ArtIPProgPacket{}
 // In all scenarios, the ArtIpProgReply is sent to the private address of the sender
 //
 // Packet Strategy:
-//  Controller -  Receive:            No Action
-//                Unicast Transmit:   Controller transmits to a specific node IP address
-//                Broadcast Transmit: Not Allowed
-//  Node -        Receive:            Reply with ArtIpProgReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
-//  MediaServer - Receive:            Reply with ArtIpProgReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
+//
+//	Controller -  Receive:            No Action
+//	              Unicast Transmit:   Controller transmits to a specific node IP address
+//	              Broadcast Transmit: Not Allowed
+//	Node -        Receive:            Reply with ArtIpProgReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
+//	MediaServer - Receive:            Reply with ArtIpProgReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
 type ArtIPProgPacket struct {
 	// Inherit the Header header
 	Header

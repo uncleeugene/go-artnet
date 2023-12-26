@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtSyncPacket{}
@@ -15,16 +15,17 @@ var _ ArtNetPacket = &ArtSyncPacket{}
 // ArtDmx packets to the nodes’ outputs at the same time.
 //
 // Packet Strategy:
-//  Controller -  Receive:            No Action
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Controller broadcasts this packet to synchronously
-//                                    transfer previous ArtDmx packets to Node’s output
-//  Node -        Receive:            Transfer previous ArtDmx packets to output
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
-//  MediaServer - Receive:            Transfer previous ArtDmx packets to output
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
+//
+//	Controller -  Receive:            No Action
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Controller broadcasts this packet to synchronously
+//	                                  transfer previous ArtDmx packets to Node’s output
+//	Node -        Receive:            Transfer previous ArtDmx packets to output
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
+//	MediaServer - Receive:            Transfer previous ArtDmx packets to output
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
 type ArtSyncPacket struct {
 	// Inherit the Header header
 	Header

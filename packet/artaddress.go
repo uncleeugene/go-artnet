@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtAddressPacket{}
@@ -16,15 +16,16 @@ var _ ArtNetPacket = &ArtAddressPacket{}
 // Fields 5 to 13 contain the data that will be programmed into the node
 //
 // Packet Strategy:
-//  Controller -  Receive:            No Action
-//                Unicast Transmit:   Controller transmits to a specific node IP address
-//                Broadcast Transmit: Not Allowed
-//  Node -        Receive:            Reply by broadcasting ArtPollReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
-//  MediaServer - Receive:            Reply by broadcasting ArtPollReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
+//
+//	Controller -  Receive:            No Action
+//	              Unicast Transmit:   Controller transmits to a specific node IP address
+//	              Broadcast Transmit: Not Allowed
+//	Node -        Receive:            Reply by broadcasting ArtPollReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
+//	MediaServer - Receive:            Reply by broadcasting ArtPollReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
 type ArtAddressPacket struct {
 	// Inherit the Header header
 	Header

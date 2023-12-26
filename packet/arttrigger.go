@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtTriggerPacket{}
@@ -28,26 +28,28 @@ var _ ArtNetPacket = &ArtTriggerPacket{}
 // However, when the Oem field = 0xffff the meaning of the Key, SubKey and Payload is:
 //
 // Key - Name     - SubKey:
-//   0 - KeyAscii - The SubKey field contains an ASCII character which the receiving device should
-//                  process as if it were a keyboard press. (Payload not used).
-//   1 - KeyMacro - The SubKey field contains the number of a Macro which the receiving device
-//                  should execute. (Payload not used).
-//   2 - KeySoft  - The SubKey field contains a soft-key number which the receiving device should
-//                  process as if it were a soft-key keyboard press. (Payload not used).
-//   3 - KeyShow  - The SubKey field contains the number of a Show which the receiving device
-//                  should run. (Payload not used).
-//   4 - - 255      Undefined
+//
+//	0 - KeyAscii - The SubKey field contains an ASCII character which the receiving device should
+//	               process as if it were a keyboard press. (Payload not used).
+//	1 - KeyMacro - The SubKey field contains the number of a Macro which the receiving device
+//	               should execute. (Payload not used).
+//	2 - KeySoft  - The SubKey field contains a soft-key number which the receiving device should
+//	               process as if it were a soft-key keyboard press. (Payload not used).
+//	3 - KeyShow  - The SubKey field contains the number of a Show which the receiving device
+//	               should run. (Payload not used).
+//	4 - - 255      Undefined
 //
 // Packet Strategy:
-//  Controller -  Receive:            Application Specific
-//                Unicast Transmit:   Application Specific
-//                Broadcast Transmit: Application Specific
-//  Node -        Receive:            Application Specific
-//                Unicast Transmit:   Application Specific
-//                Broadcast Transmit: Application Specific
-//  MediaServer - Receive:            Application Specific
-//                Unicast Transmit:   Application Specific
-//                Broadcast Transmit: Application Specific
+//
+//	Controller -  Receive:            Application Specific
+//	              Unicast Transmit:   Application Specific
+//	              Broadcast Transmit: Application Specific
+//	Node -        Receive:            Application Specific
+//	              Unicast Transmit:   Application Specific
+//	              Broadcast Transmit: Application Specific
+//	MediaServer - Receive:            Application Specific
+//	              Unicast Transmit:   Application Specific
+//	              Broadcast Transmit: Application Specific
 type ArtTriggerPacket struct {
 	// Inherit the Header header
 	Header

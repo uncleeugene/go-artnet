@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/jsimonetti/go-artnet"
+	"github.com/uncleeugene/go-artnet"
 )
 
 func main() {

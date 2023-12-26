@@ -3,7 +3,7 @@ package packet
 import (
 	"fmt"
 
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 // Unmarshal will unmarshal the bytes into an ArtNetPacket

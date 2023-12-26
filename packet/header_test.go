@@ -6,8 +6,8 @@ import (
 	"net"
 	"testing"
 
-	"github.com/jsimonetti/go-artnet/packet/code"
-	"github.com/jsimonetti/go-artnet/version"
+	"github.com/uncleeugene/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/version"
 )
 
 func TestHeaderValidate(t *testing.T) {

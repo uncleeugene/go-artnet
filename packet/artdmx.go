@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtDMXPacket{}
@@ -26,15 +26,16 @@ var _ ArtNetPacket = &ArtDMXPacket{}
 // A DMX input that fails will not continue to transmit ArtDmx data.
 //
 // Packet Strategy:
-//  Controller -  Receive:            Application Specific
-//                Unicast Transmit:   Yes
-//                Broadcast Transmit: No
-//  Node -        Receive:            Application Specific
-//                Unicast Transmit:   Yes
-//                Broadcast Transmit: No
-//  MediaServer - Receive:            Application Specific
-//                Unicast Transmit:   Yes
-//                Broadcast Transmit: No
+//
+//	Controller -  Receive:            Application Specific
+//	              Unicast Transmit:   Yes
+//	              Broadcast Transmit: No
+//	Node -        Receive:            Application Specific
+//	              Unicast Transmit:   Yes
+//	              Broadcast Transmit: No
+//	MediaServer - Receive:            Application Specific
+//	              Unicast Transmit:   Yes
+//	              Broadcast Transmit: No
 type ArtDMXPacket struct {
 	// Inherit the Header header
 	Header

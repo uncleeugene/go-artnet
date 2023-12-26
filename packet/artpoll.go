@@ -1,7 +1,7 @@
 package packet
 
 import (
-	"github.com/jsimonetti/go-artnet/packet/code"
+	"github.com/uncleeugene/go-artnet/packet/code"
 )
 
 var _ ArtNetPacket = &ArtPollPacket{}
@@ -26,16 +26,17 @@ var _ ArtNetPacket = &ArtPollPacket{}
 // disconnect.
 //
 // Packet Strategy:
-//  Controller -  Receive:            Send ArtPollReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Controller broadcasts this packet to poll all Controllers and
-//                                   Nodes on the network
-//  Node -        Receive:            Send ArtPollReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
-//  MediaServer - Receive:            Send ArtPollReply
-//                Unicast Transmit:   Not Allowed
-//                Broadcast Transmit: Not Allowed
+//
+//	Controller -  Receive:            Send ArtPollReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Controller broadcasts this packet to poll all Controllers and
+//	                                 Nodes on the network
+//	Node -        Receive:            Send ArtPollReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
+//	MediaServer - Receive:            Send ArtPollReply
+//	              Unicast Transmit:   Not Allowed
+//	              Broadcast Transmit: Not Allowed
 type ArtPollPacket struct {
 	// Inherit the Header header
 	Header
