@@ -1,4 +1,4 @@
-go-artnet [![Build Status](https://travis-ci.org/jsimonetti/go-artnet.svg?branch=master)](https://travis-ci.org/jsimonetti/go-artnet) [![GoDoc](https://godoc.org/github.com/jsimonetti/go-artnet?status.svg)](https://godoc.org/github.com/jsimonetti/go-artnet) [![Go Report Card](https://goreportcard.com/badge/github.com/jsimonetti/go-artnet)](https://goreportcard.com/report/github.com/jsimonetti/go-artnet)
+go-artnet 
 =======
 
 Package `artnet` attempts to implement the Art-Net 4 specification from (c) Artistic
